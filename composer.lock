@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f4bffe4283258a89be31f0c0d008f3cc",
+    "hash": "0b4f6ce6a834ed584377b075a5a0ada3",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -1221,17 +1221,69 @@
             "time": "2014-11-20 16:49:30"
         },
         {
-            "name": "laravel/lumen-framework",
-            "version": "v5.0.9",
+            "name": "khill/lavacharts",
+            "version": "2.5.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laravel/lumen-framework.git",
-                "reference": "b7734d6151ae3809db93d8fc30d1ed5d3541b84e"
+                "url": "https://github.com/kevinkhill/lavacharts.git",
+                "reference": "9f497fe19695ee8ce6cf424bc79075ddc5eac593"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/lumen-framework/zipball/b7734d6151ae3809db93d8fc30d1ed5d3541b84e",
-                "reference": "b7734d6151ae3809db93d8fc30d1ed5d3541b84e",
+                "url": "https://api.github.com/repos/kevinkhill/lavacharts/zipball/9f497fe19695ee8ce6cf424bc79075ddc5eac593",
+                "reference": "9f497fe19695ee8ce6cf424bc79075ddc5eac593",
+                "shasum": ""
+            },
+            "require": {
+                "nesbot/carbon": "~1.14",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "mybuilder/phpunit-accelerator": "~1.1",
+                "phpunit/phpunit": "~4.5",
+                "sami/sami": "~2.0",
+                "satooshi/php-coveralls": "~0.6",
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Khill\\Lavacharts\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Hill",
+                    "email": "kevinkhill@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP wrapper library for the Google Chart API",
+            "homepage": "http://lavacharts.com",
+            "keywords": [
+                "charts",
+                "google",
+                "graphs"
+            ],
+            "time": "2015-05-13 14:33:07"
+        },
+        {
+            "name": "laravel/lumen-framework",
+            "version": "v5.0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/lumen-framework.git",
+                "reference": "e448d32592afb4fbc29ff91d850215cb9e3a24ba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/lumen-framework/zipball/e448d32592afb4fbc29ff91d850215cb9e3a24ba",
+                "reference": "e448d32592afb4fbc29ff91d850215cb9e3a24ba",
                 "shasum": ""
             },
             "require": {
@@ -1306,7 +1358,7 @@
                 "laravel",
                 "lumen"
             ],
-            "time": "2015-05-08 12:58:04"
+            "time": "2015-05-21 18:04:31"
         },
         {
             "name": "league/flysystem",
