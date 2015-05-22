@@ -18,10 +18,10 @@ $app->get('/', function() use ($app) {
 });
 
 
-$app->post('/lux', function() use ($app) {
+$app->get('/luxStore/{lux_value}', function($lux_value) use ($app) {
     $lux = new Lux();
 
-    $lux->lux = \Illuminate\Support\Facades\Input::get('lux_value');
+    $lux->lux = $lux_value;
 
     $lux->save();
 });
