@@ -44,13 +44,13 @@ class CheckLight extends Command
 
 
             if (strtotime($state->created_at) < strtotime("-1 minutes")) { //maximaal 1x per kwartier schakelen
-                if ($lux->lux < 100 && !$state->state) { //state = 1 als de lampen aan staan
+                if ($lux->lux < 900 && !$state->state) { //state = 1 als de lampen aan staan
 
                     $this->schakelBinnen(1);
 
                     $this->inform('Lampen ingeschakeld op basis van de lichtsterkte (' . $lux->lux . ')');
 
-                } else if ($lux->lux > 200 && $state->state) {
+                } else if ($lux->lux > 1000 && $state->state) {
 
                     $this->schakelBinnen(0);
 
