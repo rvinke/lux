@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        'lux\Console\Commands\CheckLight',
     ];
 
     /**
@@ -23,6 +23,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        $schedule->command('checklight')->cron('* * * * *');
     }
 }

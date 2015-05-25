@@ -54,7 +54,16 @@ $app->get('/chart', function() use ($app) {
     $lx->addDateColumn('Date')
         ->addNumberColumn('Lux');
 
+
+    //$lx->setDateTimeFormat("d-m-Y H:i");
+
     foreach($luxes as $lux){
+        $time = strtotime($lux->created_at);
+        $year = date("Y", $time);
+        $month = date("m", $time);
+        $day = date("d", $time);
+        $hour = date("H", $time);
+        $minute = date("i", $time);
         $lx->addRow(array($lux->created_at, $lux->lux));
     }
 
@@ -71,5 +80,5 @@ $app->get('/chart', function() use ($app) {
     echo '</body></html>';
 
 
-
+ //1c1b3057cd150a828d05a615d2d2f9c847998adb
 });

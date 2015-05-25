@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0b4f6ce6a834ed584377b075a5a0ada3",
+    "hash": "eea9543a9d83db9ae3bd7326ca63c9ac",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -1689,6 +1689,40 @@
             "time": "2012-12-21 11:40:51"
         },
         {
+            "name": "stil/curl-easy",
+            "version": "v1.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stil/curl-easy.git",
+                "reference": "ba687e10bb78da7ca61edf1dac814e3bbdb38265"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stil/curl-easy/zipball/ba687e10bb78da7ca61edf1dac814e3bbdb38265",
+                "reference": "ba687e10bb78da7ca61edf1dac814e3bbdb38265",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/event-dispatcher": "~2.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "cURL": "src/",
+                    "cURL\\Tests": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "cURL wrapper for PHP. Supports parallel and non-blocking requests. For high speed crawling, see stil/curl-robot.",
+            "time": "2015-02-28 13:35:49"
+        },
+        {
             "name": "symfony/console",
             "version": "v2.6.7",
             "target-dir": "Symfony/Component/Console",
@@ -2499,16 +2533,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "2.0.16",
+            "version": "2.0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "934fd03eb6840508231a7f73eb8940cf32c3b66c"
+                "reference": "c4e8e7725e351184a76544634855b8a9c405a6e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/934fd03eb6840508231a7f73eb8940cf32c3b66c",
-                "reference": "934fd03eb6840508231a7f73eb8940cf32c3b66c",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/c4e8e7725e351184a76544634855b8a9c405a6e3",
+                "reference": "c4e8e7725e351184a76544634855b8a9c405a6e3",
                 "shasum": ""
             },
             "require": {
@@ -2557,7 +2591,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-04-11 04:35:00"
+            "time": "2015-05-25 05:11:59"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2745,16 +2779,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.6.6",
+            "version": "4.6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3afe303d873a4d64c62ef84de491b97b006fbdac"
+                "reference": "57bf06dd4eebe2a5ced79a8de71509e7d5c18b25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3afe303d873a4d64c62ef84de491b97b006fbdac",
-                "reference": "3afe303d873a4d64c62ef84de491b97b006fbdac",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/57bf06dd4eebe2a5ced79a8de71509e7d5c18b25",
+                "reference": "57bf06dd4eebe2a5ced79a8de71509e7d5c18b25",
                 "shasum": ""
             },
             "require": {
@@ -2813,7 +2847,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-04-29 15:18:52"
+            "time": "2015-05-25 05:18:18"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
