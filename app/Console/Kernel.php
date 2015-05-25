@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'lux\Console\Commands\CheckLight',
+        'App\Console\Commands\CheckLight',
     ];
 
     /**
