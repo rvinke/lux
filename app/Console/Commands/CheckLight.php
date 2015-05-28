@@ -148,7 +148,7 @@ class CheckLight extends Command
         if(time() < $sunrise) {
             //ochtend
             $colorTemp = 2600;
-	    } else if($time > $sunset) {
+	    } else if(time() > $sunset) {
             //avond
             $colorTemp = 2600;
 	    } else {
