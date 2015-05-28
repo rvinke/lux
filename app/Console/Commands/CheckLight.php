@@ -44,11 +44,11 @@ class CheckLight extends Command
 
 
             if (strtotime($state->created_at) < strtotime("-15 minutes")) { //maximaal 1x per kwartier schakelen
-                if ($lux->lux < 900 && !$state->state) { //state = 1 als de lampen aan staan
+                if ($lux->lux < 900) {  //&& !$state->state//state = 1 als de lampen aan staan (altijd schakelen om de kleur aan te passen
 
                     $this->schakelBinnen(1);
 
-                    $this->inform('Lampen ingeschakeld op basis van de lichtsterkte (' . $lux->lux . ')');
+                    $this->inform('Lampen ingeschakeld op basis van de lichtsterkte (' . $lux->lux . ', '.$this->colorTemp().'K)');
 
                 } else if ($lux->lux > 1000 && $state->state) {
 
@@ -109,7 +109,9 @@ class CheckLight extends Command
     private function schakelBinnen($stateValue)
     {
         if($stateValue) {
-            $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/on.php');
+            $colortemp = $this->colorTemp();
+
+            $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/onStars.php?temp='.$colortemp);
         }else{
             $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/off.php');
         }
@@ -134,6 +136,32 @@ class CheckLight extends Command
             ->set(CURLOPT_TIMEOUT, 5)
             ->set(CURLOPT_RETURNTRANSFER, true);
         $response = $request->send();
+
+    }
+
+    private function colorTemp()
+    {
+        $sunset = date_sunset(time(), SUNFUNCS_RET_TIMESTAMP, 52.022231, 5.582037);
+        $sunrise = date_sunrise(time(), SUNFUNCS_RET_TIMESTAMP, 52.022231, 5.582037); //astronomical twilight
+        $midDay = $sunrise + (($sunset - $sunrise) / 2);
+
+        if(time() < $sunrise) {
+            //ochtend
+            $colorTemp = 2600;
+	    } else if($time > $sunset) {
+            //avond
+            $colorTemp = 2600;
+	    } else {
+            //overdag
+            if(time() < $midDay) {
+                $colorTemp = 2700 + ((time() - $sunrise) / ($midDay - $sunrise) * 3300);
+            } else {
+                $colorTemp = 6000 - ((time() - $midDay) / ($sunset - $midDay) * 3300);
+
+		    }
+        }
+
+        return $colorTemp;
 
     }
 
