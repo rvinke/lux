@@ -32,7 +32,7 @@ class CheckLight extends Command
         //binnenlampen
         //alleen tussen 6:45 en 23:40
         $start = \DateTime::createFromFormat("H:i", "6:45");
-        $eind = \DateTime::createFromFormat("H:i", "23:45");
+        $eind = \DateTime::createFromFormat("H:i", "23:40");
         $nu = new \DateTime();
 
         if($nu > $start && $nu < $eind) {
