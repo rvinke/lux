@@ -35,35 +35,40 @@ class CheckLight extends Command
         $eind = \DateTime::createFromFormat("H:i", "23:40");
         $nu = new \DateTime();
 
-        if($nu > $start && $nu < $eind) {
-            $lux = Lux::orderBy('id', 'desc')->first();
-            $this->info($lux->lux);
-
-            $state = State::orderBy('id', 'desc')->first();
-            $this->info($state->state ? 'Nu: Aan' : 'Nu: Uit');
+        $filmRunning = $this->getFilmRunning();
 
 
-            if (strtotime($state->created_at) < strtotime("-15 minutes")) { //maximaal 1x per kwartier schakelen
-                if ($lux->lux < 900) {  //&& !$state->state//state = 1 als de lampen aan staan (altijd schakelen om de kleur aan te passen
+        if($filmRunning == "FALSE") { //result is returned as a string
+            if ($nu > $start && $nu < $eind) {
+                $lux = Lux::orderBy('id', 'desc')->first();
+                $this->info($lux->lux);
 
-                    $this->schakelBinnen(1);
+                $state = State::orderBy('id', 'desc')->first();
+                $this->info($state->state ? 'Nu: Aan' : 'Nu: Uit');
 
-                    $this->inform('Lampen ingeschakeld op basis van de lichtsterkte (' . $lux->lux . ', '.$this->colorTemp().'K)');
 
-                } else if ($lux->lux > 1000 && $state->state) {
+                if (strtotime($state->created_at) < strtotime("-15 minutes")) { //maximaal 1x per kwartier schakelen
+                    if ($lux->lux < 900) {  //&& !$state->state//state = 1 als de lampen aan staan (altijd schakelen om de kleur aan te passen
 
-                    $this->schakelBinnen(0);
+                        $this->schakelBinnen(1);
 
-                    $this->inform('Lampen uitgeschakeld op basis van de lichtsterkte (' . $lux->lux . ')');
+                        $this->inform('Lampen ingeschakeld op basis van de lichtsterkte (' . $lux->lux . ', ' . $this->colorTemp() . 'K)', FALSE);
 
+                    } else if ($lux->lux > 1000 && $state->state) {
+
+                        $this->schakelBinnen(0);
+
+                        $this->inform('Lampen uitgeschakeld op basis van de lichtsterkte (' . $lux->lux . ')');
+
+                    }
+                } else {
+                    $this->info('Niet geschakeld ivm het maximaal aantal schakelingen');
                 }
-            } else {
-                $this->info('Niet geschakeld ivm het maximaal aantal schakelingen');
             }
         }
 
         //om 23:50 altijd alles uitschakelen
-        if($nu == $eind) {
+        if($nu >= $eind AND $nu < $eind->add(new \DateInterval('P5M'))) {
             $this->schakelBinnen(0);
         }
 
@@ -139,6 +144,18 @@ class CheckLight extends Command
 
     }
 
+    private function getFilmRunning()
+    {
+        $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/filmRunning.php');
+        $request->getOptions()
+            ->set(CURLOPT_TIMEOUT, 5)
+            ->set(CURLOPT_RETURNTRANSFER, true);
+        $response = $request->send();
+
+        return $response->getContent();
+
+    }
+
     private function colorTemp()
     {
         $sunset = date_sunset(time(), SUNFUNCS_RET_TIMESTAMP, 52.022231, 5.582037);
@@ -172,10 +189,10 @@ class CheckLight extends Command
         $state->save();
     }
 
-    private function inform($message)
+    private function inform($message, $sendPushMessage = TRUE)
     {
         $this->info($message);
-        $this->sendMessage($message);
+        if($sendPushMessage) $this->sendMessage($message);
     }
 
 }
