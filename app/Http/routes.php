@@ -45,7 +45,7 @@ $app->get('/all', function() use ($app) {
 $app->get('/chart', function() use ($app) {
 
 
-    $luxes = Lux::orderBy('id', 'asc')->limit(100)->get();
+    $luxes = Lux::orderBy('id', 'desc')->limit(100)->get();
 
     $lava = new Lavacharts;
 
@@ -66,9 +66,9 @@ $app->get('/chart', function() use ($app) {
         $minute = date("i", $time);
         $lx->addRow(array($lux->created_at, $lux->lux));
 
-        $last['time'] = date("d-m-Y H:i", $time);
-        $last['lux'] = $lux->lux;
     }
+
+    $last = $luxes->first();
 
     $linechart = $lava->LineChart('Lux')
         ->dataTable($lx)
@@ -80,7 +80,7 @@ $app->get('/chart', function() use ($app) {
     echo $lava->jsapi();
     echo '<div id="temps_div"></div>';
     echo $linechart->render('temps_div');
-    echo $last['time'].': '.$last['lux'];
+    echo $last->created_at.': '.$last->lux;
     echo '</body></html>';
 
 
