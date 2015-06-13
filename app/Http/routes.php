@@ -45,7 +45,7 @@ $app->get('/all', function() use ($app) {
 $app->get('/chart', function() use ($app) {
 
 
-    $luxes = Lux::orderBy('id', 'desc')->limit(100)->get();
+    $luxes = Lux::orderBy('id', 'asc')->limit(100)->get();
 
     $lava = new Lavacharts;
 
