@@ -65,6 +65,9 @@ $app->get('/chart', function() use ($app) {
         $hour = date("H", $time);
         $minute = date("i", $time);
         $lx->addRow(array($lux->created_at, $lux->lux));
+
+        $last['time'] = date("d-m-Y H:i", $time);
+        $last['lux'] = $lux->lux;
     }
 
     $linechart = $lava->LineChart('Lux')
@@ -77,6 +80,7 @@ $app->get('/chart', function() use ($app) {
     echo $lava->jsapi();
     echo '<div id="temps_div"></div>';
     echo $linechart->render('temps_div');
+    echo $last['time'].': '.$last['lux'];
     echo '</body></html>';
 
 
