@@ -68,7 +68,7 @@ class CheckLight extends Command
         }
 
         //om 23:50 altijd alles uitschakelen
-        if($nu >= $eind AND $nu < $eind->add(new \DateInterval('P5M'))) {
+        if($nu >= $eind AND $nu < $eind->add(new \DateInterval('PT1M'))) {
             $this->schakelBinnen(0);
         }
 
