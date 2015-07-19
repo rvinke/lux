@@ -54,7 +54,7 @@ class CheckLight extends Command
 
                         $this->inform('Lampen ingeschakeld op basis van de lichtsterkte (' . $lux->lux . ', ' . $this->colorTemp() . 'K)', FALSE);
 
-                    } else if ($lux->lux > 1000 && $state->state) {
+                    } else if ($lux->lux > 1300 && $state->state) {
 
                         $this->schakelBinnen(0);
 
