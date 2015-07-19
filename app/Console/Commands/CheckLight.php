@@ -58,7 +58,7 @@ class CheckLight extends Command
 
                         $this->schakelBinnen(0);
 
-                        $this->inform('Lampen uitgeschakeld op basis van de lichtsterkte (' . $lux->lux . ')');
+                        $this->inform('Lampen uitgeschakeld op basis van de lichtsterkte (' . $lux->lux . ')', FALSE);
 
                     }
                 } else {
