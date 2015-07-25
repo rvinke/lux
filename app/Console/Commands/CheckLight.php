@@ -47,8 +47,8 @@ class CheckLight extends Command
                 $this->info($state->state ? 'Nu: Aan' : 'Nu: Uit');
 
 
-                if (strtotime($state->created_at) < strtotime("-15 minutes")) { //maximaal 1x per kwartier schakelen
-                    if ($lux->lux < 900) {  //&& !$state->state//state = 1 als de lampen aan staan (altijd schakelen om de kleur aan te passen
+                if (strtotime($state->created_at) < strtotime("-10 minutes")) { //maximaal 1x per kwartier schakelen
+                    if ($lux->lux < 930) {  //&& !$state->state//state = 1 als de lampen aan staan (altijd schakelen om de kleur aan te passen
 
                         $this->schakelBinnen(1);
 
