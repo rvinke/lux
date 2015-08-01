@@ -33,6 +33,8 @@ class CheckLight extends Command
         //alleen tussen 6:45 en 23:40
         $start = \DateTime::createFromFormat("H:i", "6:45");
         $eind = \DateTime::createFromFormat("H:i", "23:40");
+        $eindNachtbesparing = \DateTime::createFromFormat("H:i", "00:30");
+        $startNachtbesparing = \DateTime::createFromFormat("H:i", "09:30");
         $nu = new \DateTime();
 
         $filmRunning = $this->getFilmRunning();
@@ -89,6 +91,16 @@ class CheckLight extends Command
             $this->schakelBuiten(0);
         }
 
+        //Nachtbesparingsitems aanzetten
+        if($nu >= $startNachtbesparing AND $nu < $startNachtbesparing->add(new \DateInterval('PT1M'))) {
+            $this->schakelNachtbesparing(1);
+        }
+
+        //Nachtbesparingsitems uitzetten
+        if($nu >= $eindNachtbesparing AND $nu < $eindNachtbesparing->add(new \DateInterval('PT1M'))) {
+            $this->schakelNachtbesparing(0);
+        }
+
     }
 
     private function sendMessage($message)
@@ -142,6 +154,20 @@ class CheckLight extends Command
             ->set(CURLOPT_RETURNTRANSFER, true);
         $response = $request->send();
 
+    }
+
+    private function schakelNachtbesparing($stateValue)
+    {
+        if($stateValue) {
+            $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/nachtbesparingOn.php');
+        }else{
+            $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/nachtbesparingOff.php');
+        }
+
+        $request->getOptions()
+            ->set(CURLOPT_TIMEOUT, 5)
+            ->set(CURLOPT_RETURNTRANSFER, true);
+        $response = $request->send();
     }
 
     private function getFilmRunning()
