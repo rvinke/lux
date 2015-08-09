@@ -35,6 +35,10 @@ class CheckLight extends Command
         $eind = \DateTime::createFromFormat("H:i", "23:40");
         $eindNachtbesparing = \DateTime::createFromFormat("H:i", "00:30");
         $startNachtbesparing = \DateTime::createFromFormat("H:i", "09:30");
+        $weekendTVOff = \DateTime::createFromFormat("H:i", "01:00");
+        $weekendTVOn = \DateTime::createFromFormat("H:i", "07:00");
+        $weekTVOff = \DateTime::createFromFormat("H:i", "00:30");
+        $weekTVOn = \DateTime::createFromFormat("H:i", "06:00");
         $nu = new \DateTime();
 
         $filmRunning = $this->getFilmRunning();
@@ -86,7 +90,7 @@ class CheckLight extends Command
         }
 
         if(time() > $sunrise
-            AND time() - 100 < $sunrise){
+            AND time() - 200 < $sunrise){
 
             $this->schakelBuiten(0);
         }
@@ -99,6 +103,25 @@ class CheckLight extends Command
         //Nachtbesparingsitems uitzetten
         if($nu >= $eindNachtbesparing AND $nu < $eindNachtbesparing->add(new \DateInterval('PT1M'))) {
             $this->schakelNachtbesparing(0);
+        }
+
+
+        if(in_array(date("N"), [5,6])) { //weekend (vr+za)
+            if($nu >= $weekendTVOff AND $nu < $weekendTVOff->add(new \DateInterval('PT1M'))) {
+                $this->schakelTV(0);
+            }
+
+            if($nu >= $weekendTVOn AND $nu < $weekendTVOn->add(new \DateInterval('PT1M'))) {
+                $this->schakelTV(1);
+            }
+        } else {
+            if($nu >= $weekTVOff AND $nu < $weekTVOff->add(new \DateInterval('PT1M'))) {
+                $this->schakelTV(0);
+            }
+
+            if($nu >= $weekTVOn AND $nu < $weekTVOn->add(new \DateInterval('PT1M'))) {
+                $this->schakelTV(1);
+            }
         }
 
     }
@@ -162,6 +185,20 @@ class CheckLight extends Command
             $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/nachtbesparingOn.php');
         }else{
             $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/nachtbesparingOff.php');
+        }
+
+        $request->getOptions()
+            ->set(CURLOPT_TIMEOUT, 5)
+            ->set(CURLOPT_RETURNTRANSFER, true);
+        $response = $request->send();
+    }
+
+    private function schakelTV($stateValue)
+    {
+        if($stateValue) {
+            $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/tvblokOn.php');
+        }else{
+            $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/tvblokOff.php');
         }
 
         $request->getOptions()
