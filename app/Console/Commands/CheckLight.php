@@ -37,7 +37,7 @@ class CheckLight extends Command
         $startNachtbesparing = \DateTime::createFromFormat("H:i", "09:30");
         $weekendTVOff = \DateTime::createFromFormat("H:i", "01:00");
         $weekendTVOn = \DateTime::createFromFormat("H:i", "07:00");
-        $weekTVOff = \DateTime::createFromFormat("H:i", "00:30");
+        $weekTVOff = \DateTime::createFromFormat("H:i", "01:30");
         $weekTVOn = \DateTime::createFromFormat("H:i", "06:00");
         $nu = new \DateTime();
 
