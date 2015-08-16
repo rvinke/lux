@@ -90,7 +90,7 @@ class CheckLight extends Command
         }
 
         if(time() > $sunrise
-            AND time() - 200 < $sunrise){
+            AND time() - 500 < $sunrise){
 
             $this->schakelBuiten(0);
         }
