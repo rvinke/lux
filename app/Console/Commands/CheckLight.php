@@ -35,19 +35,22 @@ class CheckLight extends Command
         $eind = \DateTime::createFromFormat("H:i", "23:40");
         $eindNachtbesparing = \DateTime::createFromFormat("H:i", "00:30");
         $startNachtbesparing = \DateTime::createFromFormat("H:i", "09:30");
-        $weekendTVOff = \DateTime::createFromFormat("H:i", "01:30");
-        $weekendTVOn = \DateTime::createFromFormat("H:i", "07:00");
-        $weekTVOff = \DateTime::createFromFormat("H:i", "01:30");
-        $weekTVOn = \DateTime::createFromFormat("H:i", "06:00");
         $nu = new \DateTime();
 
         $filmRunning = $this->getFilmRunning();
 
 
-        if($filmRunning == "FALSE") { //result is returned as a string
+        if ($filmRunning == "FALSE") { //result is returned as a string
+            //
             if ($nu > $start && $nu < $eind) {
                 $lux = Lux::orderBy('id', 'desc')->first();
                 $this->info($lux->lux);
+
+                $lux_created_at = \DateTime::createFromFormat("Y-m-d H:i", $lux->created_at);
+                if ($lux_created_at->diff($nu, true)->i > 5) {
+                    $this->powerCycle();
+                    $this->info('Powercycle');
+                }
 
                 $state = State::orderBy('id', 'desc')->first();
                 $this->info($state->state ? 'Nu: Aan' : 'Nu: Uit');
@@ -74,7 +77,7 @@ class CheckLight extends Command
         }
 
         //om 23:50 altijd alles uitschakelen
-        if($nu >= $eind AND $nu < $eind->add(new \DateInterval('PT1M'))) {
+        if ($nu >= $eind AND $nu < $eind->add(new \DateInterval('PT1M'))) {
             $this->schakelBinnen(0);
         }
 
@@ -83,45 +86,28 @@ class CheckLight extends Command
         $sunset = date_sunset(time(), SUNFUNCS_RET_TIMESTAMP, 52.022231, 5.582037);
         $sunrise = date_sunrise(time(), SUNFUNCS_RET_TIMESTAMP, 52.022231, 5.582037, 97); //astronomical twilight
 
-        if((time() + 1800) > $sunset
-            AND time() + 1740 < $sunset ){
+        if ((time() + 1800) > $sunset
+            AND time() + 1740 < $sunset
+        ) {
 
             $this->schakelBuiten(1);
         }
 
-        if(time() > $sunrise
-            AND time() - 500 < $sunrise){
+        if (time() > $sunrise
+            AND time() - 500 < $sunrise
+        ) {
 
             $this->schakelBuiten(0);
         }
 
         //Nachtbesparingsitems aanzetten
-        if($nu >= $startNachtbesparing AND $nu < $startNachtbesparing->add(new \DateInterval('PT1M'))) {
+        if ($nu >= $startNachtbesparing AND $nu < $startNachtbesparing->add(new \DateInterval('PT1M'))) {
             $this->schakelNachtbesparing(1);
         }
 
         //Nachtbesparingsitems uitzetten
-        if($nu >= $eindNachtbesparing AND $nu < $eindNachtbesparing->add(new \DateInterval('PT1M'))) {
+        if ($nu >= $eindNachtbesparing AND $nu < $eindNachtbesparing->add(new \DateInterval('PT1M'))) {
             $this->schakelNachtbesparing(0);
-        }
-
-
-        if(in_array(date("N"), [5,6])) { //weekend (vr+za)
-            if($nu >= $weekendTVOff AND $nu < $weekendTVOff->add(new \DateInterval('PT1M'))) {
-                $this->schakelTV(0);
-            }
-
-            if($nu >= $weekendTVOn AND $nu < $weekendTVOn->add(new \DateInterval('PT1M'))) {
-                $this->schakelTV(1);
-            }
-        } else {
-            if($nu >= $weekTVOff AND $nu < $weekTVOff->add(new \DateInterval('PT1M'))) {
-                $this->schakelTV(0);
-            }
-
-            if($nu >= $weekTVOn AND $nu < $weekTVOn->add(new \DateInterval('PT1M'))) {
-                $this->schakelTV(1);
-            }
         }
 
     }
@@ -148,11 +134,11 @@ class CheckLight extends Command
 
     private function schakelBinnen($stateValue)
     {
-        if($stateValue) {
+        if ($stateValue) {
             $colortemp = $this->colorTemp();
 
-            $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/onStars.php?temp='.$colortemp);
-        }else{
+            $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/onStars.php?temp=' . $colortemp);
+        } else {
             $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/off.php');
         }
 
@@ -166,9 +152,9 @@ class CheckLight extends Command
 
     private function schakelBuiten($stateValue)
     {
-        if($stateValue) {
+        if ($stateValue) {
             $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/buitenlampOn.php');
-        }else{
+        } else {
             $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/buitenlampOff.php');
         }
 
@@ -177,6 +163,16 @@ class CheckLight extends Command
             ->set(CURLOPT_RETURNTRANSFER, true);
         $response = $request->send();
 
+    }
+
+    private function powerCycle()
+    {
+        $request = new \cURL\Request('http://thuis.ronaldvinke.nl:8080/powerCycle.php');
+
+        $request->getOptions()
+            ->set(CURLOPT_TIMEOUT, 5)
+            ->set(CURLOPT_RETURNTRANSFER, true);
+        $response = $request->send();
     }
 
     private function schakelNachtbesparing($stateValue)
