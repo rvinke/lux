@@ -45,8 +45,8 @@ class CheckLight extends Command
             if ($nu > $start && $nu < $eind) {
                 $lux = Lux::orderBy('id', 'desc')->first();
                 $this->info($lux->lux);
-                dd($lux);
-                $lux_created_at = \DateTime::createFromFormat("Y-m-d H:i", $lux->created_at);
+                
+                $lux_created_at = \DateTime::createFromFormat("Y-m-d H:i:s", $lux->created_at);
                 $this->info($lux_created_at->diff($nu, true)->i);
                 if ($lux_created_at->diff($nu, true)->i > 5) {
                     $this->powerCycle();
