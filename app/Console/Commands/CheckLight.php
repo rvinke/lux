@@ -47,6 +47,7 @@ class CheckLight extends Command
                 $this->info($lux->lux);
 
                 $lux_created_at = \DateTime::createFromFormat("Y-m-d H:i", $lux->created_at);
+                $this->info($lux_created_at->diff($nu, true)->i);
                 if ($lux_created_at->diff($nu, true)->i > 5) {
                     $this->powerCycle();
                     $this->info('Powercycle');
