@@ -83,6 +83,4 @@ $app->get('/chart', function() use ($app) {
     echo $last->created_at.': '.$last->lux;
     echo '</body></html>';
 
-
- //1c1b3057cd150a828d05a615d2d2f9c847998adb
 });
