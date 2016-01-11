@@ -39,52 +39,55 @@ class CheckLight extends Command
 
         $filmRunning = $this->getFilmRunning();
 
-
-        if ($filmRunning == "FALSE") { //result is returned as a string
-            //
-            if ($nu > $start && $nu < $eind) {
-                $lux = Lux::orderBy('id', 'desc')->first();
-                $this->info($lux->lux);
-
-                $lux_created_at = \DateTime::createFromFormat("Y-m-d H:i:s", $lux->created_at);
-                $this->info($lux_created_at->diff($nu, true)->i);
-                if ($lux_created_at->diff($nu, true)->i > 5) {
-                    $this->powerCycle();
-                    $this->info('Powercycle');
-                }
-
-                $state = State::orderBy('id', 'desc')->first();
-                $this->info($state->state ? 'Nu: Aan' : 'Nu: Uit');
-
-
-                if (strtotime($state->created_at) < strtotime("-10 minutes")) { //maximaal 1x per kwartier schakelen
-                    if ($lux->lux < 930) {  //&& !$state->state//state = 1 als de lampen aan staan (altijd schakelen om de kleur aan te passen
-
-                        $this->schakelBinnen(1);
-
-                        $this->inform('Lampen ingeschakeld op basis van de lichtsterkte (' . $lux->lux . ', ' . $this->colorTemp() . 'K)', FALSE);
-
-                    } else if ($lux->lux > 1300 && $state->state) {
-
-                        $this->schakelBinnen(0);
-
-                        $this->inform('Lampen uitgeschakeld op basis van de lichtsterkte (' . $lux->lux . ')', FALSE);
-
-                    }
-                } else {
-                    $this->info('Niet geschakeld ivm het maximaal aantal schakelingen');
-                }
-            }
+        //controleren of de lux-meter nog werkt
+        if ($lux_created_at->diff($nu, true)->i > 5) {
+            $this->powerCycle();
+            $this->info('Powercycle');
         }
+
+        //
+        /*if ($nu > $start && $nu < $eind) {
+            $lux = Lux::orderBy('id', 'desc')->first();
+            $this->info($lux->lux);
+
+            $lux_created_at = \DateTime::createFromFormat("Y-m-d H:i:s", $lux->created_at);
+            $this->info($lux_created_at->diff($nu, true)->i);
+            if ($lux_created_at->diff($nu, true)->i > 5) {
+                $this->powerCycle();
+                $this->info('Powercycle');
+            }
+
+            $state = State::orderBy('id', 'desc')->first();
+            $this->info($state->state ? 'Nu: Aan' : 'Nu: Uit');
+
+
+            if (strtotime($state->created_at) < strtotime("-10 minutes")) { //maximaal 1x per kwartier schakelen
+                if ($lux->lux < 930) {  //&& !$state->state//state = 1 als de lampen aan staan (altijd schakelen om de kleur aan te passen
+
+                    $this->schakelBinnen(1);
+
+                    $this->inform('Lampen ingeschakeld op basis van de lichtsterkte (' . $lux->lux . ', ' . $this->colorTemp() . 'K)', FALSE);
+
+                } else if ($lux->lux > 1300 && $state->state) {
+
+                    $this->schakelBinnen(0);
+
+                    $this->inform('Lampen uitgeschakeld op basis van de lichtsterkte (' . $lux->lux . ')', FALSE);
+
+                }
+            } else {
+                $this->info('Niet geschakeld ivm het maximaal aantal schakelingen');
+            }
+        }*/
 
         //om 23:50 altijd alles uitschakelen
-        if ($nu >= $eind AND $nu < $eind->add(new \DateInterval('PT1M'))) {
+        /*if ($nu >= $eind AND $nu < $eind->add(new \DateInterval('PT1M'))) {
             $this->schakelBinnen(0);
-        }
+        }*/
 
 
         //buitenlamp
-        $sunset = date_sunset(time(), SUNFUNCS_RET_TIMESTAMP, 52.022231, 5.582037);
+        /*$sunset = date_sunset(time(), SUNFUNCS_RET_TIMESTAMP, 52.022231, 5.582037);
         $sunrise = date_sunrise(time(), SUNFUNCS_RET_TIMESTAMP, 52.022231, 5.582037, 97); //astronomical twilight
 
         if ((time() + 1800) > $sunset
@@ -99,7 +102,7 @@ class CheckLight extends Command
         ) {
 
             $this->schakelBuiten(0);
-        }
+        }*/
 
         //Nachtbesparingsitems aanzetten
         if ($nu >= $startNachtbesparing AND $nu < $startNachtbesparing->add(new \DateInterval('PT1M'))) {
